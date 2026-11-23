@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CV Matcher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F4F6F9;--sheet:#fff;--ink:#1B2333;--muted:#5C6577;--line:#D9DEE6;--hl:#FFE45C;--hl-ink:#1B2333;--miss:#C2412D;--ok:#2F7D5B;--accent:#2747C7;--accent-ink:#fff;--warn:#A86A00;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--paper:#11151D;--sheet:#181D28;--ink:#E7EAF0;--muted:#9AA3B2;--line:#2A3140;--hl:rgba(255,228,92,.38);--hl-ink:#F4F1DE;--miss:#F07A63;--ok:#5CC497;--accent:#8EA2FF;--accent-ink:#0E1220;--warn:#E7B04A;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 "Instrument Sans",system-ui,sans-serif}
+main{max-width:880px;margin:0 auto;padding:32px 20px 80px}
+h1,h2,h3{font-family:"Instrument Serif",Georgia,serif;font-weight:400;line-height:1.15;margin:0}h1{font-size:clamp(2.2rem,6vw,3.3rem)}h2{font-size:1.85rem}h3{font-size:1.3rem;margin:16px 0 6px}
+.lede{color:var(--muted);max-width:62ch}.lede mark,.jd mark{background:var(--hl);color:var(--hl-ink);padding:0 3px;border-radius:2px}.gap{text-decoration:var(--miss) wavy underline;text-underline-offset:3px}
+section{margin-top:40px}.head{display:flex;gap:14px;align-items:baseline;margin-bottom:12px}.n{font-family:"Instrument Serif",serif;font-size:1.8rem;color:var(--accent)}
+.hint{color:var(--muted);font-size:.9rem;margin:2px 0 0}.panel{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:12px}
+label.f{display:block;font-weight:600;font-size:.9rem;margin:10px 0 6px}input[type=text],input[type=url],textarea{width:100%;font:inherit;font-size:.95rem;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px}textarea{min-height:140px;resize:vertical}
+button{font:inherit;font-weight:600;font-size:.95rem;border-radius:8px;border:1px solid var(--line);background:var(--sheet);color:var(--ink);padding:10px 16px;cursor:pointer}button.p{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}button.l{border:none;background:none;color:var(--accent);padding:4px 0}button:disabled{opacity:.5}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.status{color:var(--muted);font-size:.92rem;margin-top:10px;min-height:1.3em}.status.err{color:var(--miss)}.hidden{display:none!important}
+.big{font-family:"Instrument Serif",serif;font-size:4rem;line-height:1}.big small{font-size:1.3rem;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:.95rem}td{padding:8px 6px;border-top:1px solid var(--line)}td.s{text-align:right;font-weight:700;width:90px;font-variant-numeric:tabular-nums}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.chip{display:inline-flex;gap:7px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:5px 12px 5px 9px;font-size:.88rem;background:var(--paper);cursor:pointer}.chip.on{border-color:var(--ok)}.chip small{color:var(--muted)}
+details.job>summary{list-style:none;display:flex;gap:14px;align-items:center;cursor:pointer}details.job>summary::-webkit-details-marker{display:none}
+.ring{flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),var(--line) 0)}.ring span{width:44px;height:44px;border-radius:50%;background:var(--sheet);display:grid;place-items:center;font-weight:700}
+.bd{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:14px 0;font-size:.85rem;color:var(--muted)}.bd b{display:block;color:var(--ink);font-size:1rem}
+ul.s{list-style:none;padding:0;margin:0}ul.s li{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--line)}.k{flex:none;font-size:.72rem;font-weight:700;padding:2px 7px;border-radius:4px;height:fit-content;margin-top:3px}
+.k.required{background:color-mix(in srgb,var(--miss) 16%,transparent);color:var(--miss)}.k.preferred{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}.k.info{background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.ev{font-size:.85rem;color:var(--muted);border-left:3px solid var(--line);padding-left:8px;margin:6px 0}
+ul.s label{font-size:.88rem;color:var(--muted);display:inline-flex;gap:6px;align-items:center;margin-top:4px;cursor:pointer}
+.jd{white-space:pre-wrap;font-size:.9rem;line-height:1.7;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px;max-height:320px;overflow:auto}
+.sheet{background:#fff;color:#1a1a1a;border-radius:4px;box-shadow:0 8px 30px rgba(20,30,50,.12);padding:34px;font:13px/1.45 Helvetica,Arial,sans-serif}.sheet h4{font-size:21px;margin:0}.sheet h5{font-size:13px;margin:14px 0 5px;border-bottom:1px solid #bbb}.sheet .eh{font-weight:700;margin-top:7px}.sheet .es{color:#555;font-size:12px}.sheet ul{margin:3px 0;padding-left:16px}
+@media(max-width:560px){main{padding:22px 14px 60px}.sheet{padding:20px 14px}}
+</style>
+</head>
+<body><main>
+<header><h1>CV Matcher</h1><p class="lede">Score your CV against the jobs you want: <mark>keywords you have</mark>, <span class="gap">keywords you’re missing</span>, experience you show but never name, and a rebuilt PDF with the fixes you confirm.</p><p class="hint" id="engine"></p></header>
+
+<section><div class="head"><span class="n">1</span><div><h2>Your CV</h2><p class="hint">A text-based PDF, or paste the text.</p></div></div>
+<div class="panel"><input type="file" id="cvFile" accept="application/pdf,.pdf"><details><summary class="hint" style="cursor:pointer;margin-top:10px">Paste text instead</summary><textarea id="cvText" style="margin-top:8px"></textarea></details></div></section>
+
+<section><div class="head"><span class="n">2</span><div><h2>Job openings</h2><p class="hint">Paste a description or a job link. Links work for most career pages.</p></div></div>
+<div id="jobs"></div><div class="row"><button id="add">Add another opening</button></div>
+<label class="row" style="margin:16px 0;gap:8px"><input type="checkbox" id="useLlm" checked> <span>Use Claude to read postings and rewrite the CV <span class="hint" id="llmHint"></span></span></label>
+<button class="p" id="go">Score my CV</button><div class="status" id="st" role="status" aria-live="polite"></div></section>
+
+<section id="res" class="hidden"><div class="head"><span class="n">3</span><div><h2>How you score</h2><p class="hint">Tick only what you can defend in an interview.</p></div></div>
+<div class="panel"><div class="row" style="gap:22px"><div class="big" id="avg"></div><div class="hint">Required keywords 45 · nice-to-haves 10 · fit with the duties 10 · title 15 · experience 10 · format 10</div></div><table id="rank" style="margin-top:12px"></table><div id="warn"></div></div>
+<div class="panel"><h3 style="margin-top:0">Gaps across openings</h3><p class="hint">Number of openings asking for it.</p><div class="chips" id="gaps"></div></div>
+<div id="cards"></div></section>
+
+<section id="ap" class="hidden"><div class="head"><span class="n">4</span><div><h2>Update your CV</h2><p class="hint">Employers, dates and numbers are never changed.</p></div></div>
+<div class="panel"><label class="f" for="headline">Headline under your name</label><input type="text" id="headline"><label class="f">You confirmed</label><div class="chips" id="conf"></div>
+<div class="row" style="margin-top:14px"><button class="p" id="apply">Apply changes</button></div><div class="status" id="ast" role="status" aria-live="polite"></div></div>
+<div id="after" class="hidden"><div class="panel"><h3 style="margin-top:0">Before and after</h3><table id="cmp"></table><h3>What changed</h3><ul id="chg"></ul>
+<div class="row"><button class="p" id="dl">Download PDF</button><button id="again">Score again with this version</button></div><div class="status" id="dst"></div></div><div class="sheet" id="prev"></div></div></section>
+</main>
+<script>
+(()=>{"use strict";
+const $=id=>document.getElementById(id),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let key="";try{key=localStorage.getItem("cvm-key")||""}catch(e){}
+const S={jobs:[{title:"",text:"",url:""}],res:null,cv:null,newCv:null,confirmed:{},accepted:{}};
+async function api(path,opt={}){opt.headers=Object.assign({},opt.headers||{},key?{"X-API-Key":key}:{});const r=await fetch(path,opt);
+  if(r.status===401){key=prompt("This server needs an access key")||"";try{localStorage.setItem("cvm-key",key)}catch(e){}if(key)return api(path,opt);}
+  if(!r.ok){let m="Request failed ("+r.status+")";try{m=(await r.json()).detail||m}catch(e){}throw new Error(typeof m==="string"?m:JSON.stringify(m));}return r;}
+api("/api/health").then(r=>r.json()).then(h=>{$("engine").textContent="Matching with "+(h.similarity==="embeddings"?"semantic embeddings":"keyword similarity")+(h.llm?" and Claude.":".");if(!h.llm){$("useLlm").checked=false;$("useLlm").disabled=true;$("llmHint").textContent="(not configured on this server)";}}).catch(()=>{});
+function jobs(){const b=$("jobs");b.innerHTML="";S.jobs.forEach((j,i)=>{const d=document.createElement("div");d.className="panel";
+  d.innerHTML=`<label class="f" style="margin-top:0">Job title</label><input type="text" value="${esc(j.title)}" placeholder="Senior Java Engineer"><label class="f">Job link (optional)</label><input type="url" value="${esc(j.url)}" placeholder="https://…"><label class="f">Job description</label><textarea placeholder="Paste the posting, or leave empty to read the link">${esc(j.text)}</textarea>${S.jobs.length>1?'<button class="l rm">Remove</button>':""}`;
+  const [t,u]=d.querySelectorAll("input");t.oninput=()=>j.title=t.value;u.oninput=()=>j.url=u.value;d.querySelector("textarea").oninput=e=>j.text=e.target.value;
+  const rm=d.querySelector(".rm");if(rm)rm.onclick=()=>{S.jobs.splice(i,1);jobs();};b.appendChild(d);});}
+jobs();$("add").onclick=()=>{S.jobs.push({title:"",text:"",url:""});jobs();};
+const col=s=>s>=80?"var(--ok)":s>=60?"var(--warn)":"var(--miss)";
+$("go").onclick=async()=>{const st=$("st");st.className="status";const fd=new FormData();const f=$("cvFile").files[0];
+  if(f)fd.append("cv_file",f);else if($("cvText").value.trim())fd.append("cv_text",$("cvText").value);else{st.textContent="Add your CV first.";st.className="status err";return;}
+  const js=S.jobs.filter(j=>j.text.trim()||j.url.trim());if(!js.length){st.textContent="Add at least one opening.";st.className="status err";return;}
+  fd.append("jobs",JSON.stringify(js));fd.append("use_llm",$("useLlm").checked);$("go").disabled=true;st.textContent="Reading your CV and "+js.length+" opening"+(js.length>1?"s":"")+"…";
+  try{const r=await(await api("/api/analyze",{method:"POST",body:fd})).json();S.res=r;S.cv=r.cv;S.confirmed={};S.accepted={};render();st.textContent="";$("res").scrollIntoView({behavior:"smooth"});}
+  catch(e){st.textContent=e.message;st.className="status err";}finally{$("go").disabled=false;}};
+function render(){const r=S.res;$("avg").innerHTML=r.average+"<small>/100</small>";
+  const order=r.jobs.map((_,i)=>i).sort((a,b)=>r.jobs[b].score.total-r.jobs[a].score.total);
+  $("rank").innerHTML=order.map(i=>{const j=r.jobs[i];return`<tr><td>${esc(j.analysis.title)}</td><td style="width:28%"><div class="bar"><i style="width:${j.score.total}%;background:${col(j.score.total)}"></i></div></td><td class="s">${j.score.total}</td></tr>`}).join("");
+  $("warn").innerHTML=r.warnings.map(w=>`<p class="hint" style="color:var(--warn)">${esc(w)}</p>`).join("");
+  $("gaps").innerHTML=r.common_gaps.length?r.common_gaps.map(g=>chip(g.term,g.openings)).join(""):'<p class="hint">No gaps.</p>';
+  $("cards").innerHTML=r.jobs.map((j,i)=>card(j,i)).join("");wire();$("res").classList.remove("hidden");$("ap").classList.remove("hidden");$("after").classList.add("hidden");
+  if(!$("headline").value)$("headline").value=S.cv.headline||"";conf();
+  document.querySelectorAll(".ut").forEach(b=>b.onclick=()=>{const h=S.cv.headline||"";$("headline").value=h&&!h.toLowerCase().includes(b.dataset.t.toLowerCase())?h.split("|")[0].trim()+" | "+b.dataset.t:b.dataset.t;$("ap").scrollIntoView({behavior:"smooth"});});}
+function chip(t,n){const k=t.toLowerCase(),on=!!S.confirmed[k];return`<label class="chip${on?" on":""}"><input type="checkbox" data-t="${esc(t)}"${on?" checked":""}> ${esc(t)}${n!=null?` <small>${n}</small>`:""}</label>`}
+function card(j,i){const s=j.score,a=j.analysis;const li=s.suggestions.map(g=>{const tick=g.needs_confirmation?(g.kind==="missing"||g.kind==="version"?`<br><label><input type="checkbox" data-t="${esc(g.term)}"${S.confirmed[g.term.toLowerCase()]?" checked":""}> I have this</label>`:`<br><label><input type="checkbox" data-sid="${esc(g.id)}" data-j="${i}"> Yes, name it</label>`):g.kind==="context"?`<br><label><input type="checkbox" data-sid="${esc(g.id)}" data-j="${i}"> Add it to a bullet</label>`:g.kind==="title"?` <button class="l ut" data-t="${esc(g.term)}">Use in my headline</button>`:"";
+    const lab={required:"Required",preferred:"Nice to have",info:{title:"Title",experience:"Experience",format:"Format",context:"Context"}[g.kind]||"Tip"}[g.priority];
+    return`<li><span class="k ${g.priority}">${lab}</span><div>${esc(g.message)}${g.evidence?`<div class="ev">${esc(g.evidence)}</div>`:""}${tick}</div></li>`}).join("");
+  return`<details class="panel job"${i===0?" open":""}><summary><div class="ring" style="--p:${s.total};--c:${col(s.total)}"><span>${s.total}</span></div><div><b>${esc(a.title)}</b><div class="hint">${s.matched} of ${s.total_terms} keywords${a.source==="llm"?" · read by Claude":""}</div></div></summary>
+  <div class="bd"><div><b>${Math.round(s.keywords*55)}/55</b>Keywords</div><div><b>${Math.round(s.semantic*10)}/10</b>Fit with duties</div><div><b>${Math.round(s.title*15)}/15</b>Title</div><div><b>${Math.round(s.experience*10)}/10</b>Experience${a.min_years?" (asks "+a.min_years+"+)":""}</div><div><b>${Math.round(s.format*10)}/10</b>Format</div></div>
+  <h3>What to change</h3>${li?`<ul class="s">${li}</ul>`:'<p class="hint">Nothing to change.</p>'}<h3>The posting, marked up</h3><div class="jd">${mark(a,s)}</div></details>`}
+function rx(words,fl){const alts=words.filter(Boolean).map(w=>w.trim().replace(/[.*+?^${}()|[\]\\\/]/g,"\\$&").replace(/\s+/g,"[\\s\\-]+")).sort((a,b)=>b.length-a.length);return new RegExp("(?<![A-Za-z0-9+#])(?:"+alts.join("|")+")(?![A-Za-z0-9+#])",fl||"i")}
+function mark(a,s){const t=a.text,rs=[];a.terms.forEach((x,i)=>{const hit=s.term_results[i]&&s.term_results[i].credit>=.9,re=rx([x.term,...x.aliases],"gi");let m;while((m=re.exec(t))){rs.push({s:m.index,e:m.index+m[0].length,hit});}});
+  rs.sort((x,y)=>x.s-y.s||(y.e-y.s)-(x.e-x.s));let o="",p=0;rs.forEach(r=>{if(r.s<p)return;o+=esc(t.slice(p,r.s))+(r.hit?"<mark>":'<span class="gap">')+esc(t.slice(r.s,r.e))+(r.hit?"</mark>":"</span>");p=r.e;});return o+esc(t.slice(p))}
+function wire(){document.querySelectorAll("[data-t]").forEach(cb=>{if(cb.tagName!=="INPUT")return;cb.onchange=()=>{const k=cb.dataset.t.toLowerCase();if(cb.checked)S.confirmed[k]=cb.dataset.t;else delete S.confirmed[k];
+    document.querySelectorAll("input[data-t]").forEach(o=>{if(o.dataset.t.toLowerCase()===k){o.checked=cb.checked;const l=o.closest(".chip");if(l)l.classList.toggle("on",cb.checked)}});conf();}});
+  document.querySelectorAll("[data-sid]").forEach(cb=>cb.onchange=()=>{const g=S.res.jobs[+cb.dataset.j].score.suggestions.find(x=>x.id===cb.dataset.sid);if(cb.checked)S.accepted[g.id]=g;else delete S.accepted[g.id];conf();});}
+function conf(){const c=Object.values(S.confirmed),a=Object.values(S.accepted);$("conf").innerHTML=c.length||a.length?c.map(t=>chip(t)).join("")+a.map(g=>`<span class="chip on">${esc(g.term)} <small>${g.kind==="implied"?"named in bullet":"added to a bullet"}</small></span>`).join(""):'<p class="hint" style="margin:0">Nothing yet. Tick gaps above.</p>';wire();}
+$("apply").onclick=async()=>{const st=$("ast");st.className="status";$("apply").disabled=true;st.textContent="Rebuilding your CV…";
+  try{const body={cv:S.cv,jobs:S.res.jobs.map(j=>j.analysis),confirmed_terms:Object.values(S.confirmed),accepted:Object.values(S.accepted),headline:$("headline").value,use_llm:$("useLlm").checked};
+    const r=await(await api("/api/apply",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})).json();S.newCv=r.cv;S.newRes=r.after;
+    $("cmp").innerHTML=S.res.jobs.map((j,i)=>{const b=r.before[i],a=r.after.jobs[i].score.total,d=a-b;return`<tr><td>${esc(j.analysis.title)}</td><td class="s">${b} → ${a}${d>0?` <span style="color:var(--ok)">+${d}</span>`:""}</td></tr>`}).join("");
+    $("chg").innerHTML=(r.changes.length?r.changes:["No changes. Tick some gaps or edit the headline."]).map(c=>`<li>${esc(c)}</li>`).join("");
+    $("dst").textContent=r.pages>2?`It runs to ${r.pages} pages; consider trimming.`:`${r.pages} page${r.pages>1?"s":""}.`;
+    $("prev").innerHTML=preview(r.cv);$("after").classList.remove("hidden");st.textContent=r.rewritten_by==="llm"?"Rewritten by Claude and fact-checked.":"Changes applied directly.";$("after").scrollIntoView({behavior:"smooth"});}
+  catch(e){st.textContent=e.message;st.className="status err";}finally{$("apply").disabled=false;}};
+function preview(c){let h=`<h4>${esc(c.name)}</h4>${c.headline?`<b>${esc(c.headline)}</b>`:""}<div style="color:#555;font-size:11.5px">${esc(c.contact.join(" · "))}</div>`;
+  c.sections.forEach(s=>{h+=`<h5>${esc(s.title)}</h5>`;s.entries.forEach(e=>{if(e.heading)h+=`<div class="eh">${esc(e.heading)}</div>`;if(e.subheading)h+=`<div class="es">${esc(e.subheading)}</div>`;if(e.text)h+=`<div>${esc(e.text)}</div>`;if(e.bullets.length)h+="<ul>"+e.bullets.map(b=>`<li>${esc(b)}</li>`).join("")+"</ul>";});});return h;}
+$("dl").onclick=async()=>{try{const r=await api("/api/pdf",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({cv:S.newCv})});const b=await r.blob();const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download=(S.newCv.name||"CV").replace(/\s+/g,"_")+"_CV.pdf";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),5000);}catch(e){$("dst").textContent=e.message;}};
+$("again").onclick=()=>{S.cv=S.newCv;S.res=S.newRes;S.confirmed={};S.accepted={};$("headline").value=S.cv.headline;render();$("res").scrollIntoView({behavior:"smooth"});};
+})();
+</script></body></html>

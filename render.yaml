@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: cv-matcher
+    runtime: docker
+    plan: free             # sleeps after 15 min idle (~30-60 s cold start); no keep-awake pinger, see README
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false        # set in the Render dashboard; leave empty to run without Claude
+      - key: ANTHROPIC_MODEL
+        value: claude-sonnet-5-5
+      - key: EMBEDDINGS
+        value: "on"        # set "off" on the free plan if you hit memory limits
+      - key: SERVICE_API_KEY
+        sync: false        # optional: require an X-API-Key header
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: RATE_LIMIT_PER_MIN
+        value: "20"        # API calls per visitor IP per minute
+      - key: LLM_DAILY_LIMIT
+        value: "200"       # Claude calls per day across all visitors; then it falls back to rules
